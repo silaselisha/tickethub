@@ -1,0 +1,26 @@
+{
+  "name": "auth",
+  "version": "1.0.0",
+  "description": "Authentiacation & Authorization",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node-dev --poll ./src/index.ts"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-validator": "^7.0.1",
+    "mongoose": "^7.3.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/morgan": "^1.9.4",
+    "@types/node": "^20.2.3",
+    "morgan": "^1.10.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.0.4"
+  },
+  "author": "Elisha K. Silas",
+  "license": "MIT"
+}
