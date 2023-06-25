@@ -5,6 +5,7 @@ import morgan from 'morgan'
 import authRouter from './routes/index'
 import errorHandler from './middlewares'
 import databaseConnection from './utils/db'
+import NotFound from './errors/notfound'
 
 
 const app = express()
@@ -17,6 +18,11 @@ app.use(morgan('dev'))
  * ** Route mounting
  */
 app.use('/api/v1/users', authRouter)
+
+app.all('*', () => {
+    throw new NotFound()
+})
+
 app.use(errorHandler)
 
 const PORT = process.env.PORT || 3000

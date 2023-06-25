@@ -1,9 +1,10 @@
 import { ValidationError } from 'express-validator'
+import CustomError from './custom-error'
 
-class RequestValidatorError extends Error {
+class RequestValidatorError extends CustomError {
     public statusCode: number = 400
     constructor(public errors: ValidationError[]) {
-        super()
+        super('invalid user data')
         Object.setPrototypeOf(this, RequestValidatorError.prototype)
     }
 

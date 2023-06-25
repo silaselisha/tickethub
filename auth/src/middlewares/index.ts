@@ -1,17 +1,11 @@
 import express, { Request, Response, NextFunction } from 'express'
 import DatabaseConnectionError from '../errors/database-connection-error'
 import RequestValidatorError from '../errors/request-validator-error'
+import CustomError from '../errors/custom-error'
 
 function errorHandler(err: Error, req: Request, res: Response, next: NextFunction) {
-    if(err instanceof RequestValidatorError) {
 
-        return res.status(err.statusCode).json({
-            status: 'failed',
-            errors: err.serializeError()
-        })
-    }
-
-    if(err instanceof DatabaseConnectionError) {
+    if(err instanceof CustomError) {
         return res.status(err.statusCode).json({
             status: 'failed',
             errors: err.serializeError()
