@@ -15,6 +15,12 @@ spec:
       containers:
         - name: auth 
           image: elisilas/auth 
+          env:
+          - name: jwtsecret
+            valueFrom:
+              secretKeyRef:
+                name: jwtsecret
+                key: JWT_KEY
 ---
 apiVersion: v1 
 kind: Service 

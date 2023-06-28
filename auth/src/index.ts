@@ -6,13 +6,18 @@ import authRouter from './routes/index'
 import errorHandler from './middlewares'
 import databaseConnection from './utils/db'
 import NotFound from './errors/notfound'
+import cookieSession from 'cookie-session'
 
 
 const app = express()
+app.set('trust proxy', true)
 app.use(cors())
 app.use(express.json())
 app.use(morgan('dev'))
-
+app.use(cookieSession({
+    secure: true,
+    signed: true
+}))
 /**
  * @TODO 
  * ** Route mounting

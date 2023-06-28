@@ -41,4 +41,9 @@ userSchema.statics.build = (attr: UserAttr) => {
     return new User(attr)
 }
 
+const user = User.build({
+    email: 'test@test.com',
+    password: 'pass1234'
+})
+
 export default User
