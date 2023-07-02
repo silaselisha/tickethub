@@ -22,16 +22,24 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, 'providea passwoed'],
+        required: [true, 'provide a password'],
         trim: true
+    }
+}, {
+    toJSON: {
+        transform(doc, ret) {
+            const id: string = ret._id
+            ret.id = id
+            delete ret._id
+            delete ret.password
+            delete ret.__v
+        }
     }
 })
 
-const User = mongoose.model<UserDoc, UserModel>('User', userSchema)
-
-userSchema.pre('save', function(next) {
+userSchema.pre('save', async function(next) {
     if(this.isModified('password')) {
-        const hashed = PasswordHashing.toHash(this.get('password'))
+        const hashed = await PasswordHashing.toHash(this.get('password'))
         this.set('password', hashed)
     }
     
@@ -41,9 +49,6 @@ userSchema.statics.build = (attr: UserAttr) => {
     return new User(attr)
 }
 
-const user = User.build({
-    email: 'test@test.com',
-    password: 'pass1234'
-})
+const User = mongoose.model<UserDoc, UserModel>('User', userSchema)
 
 export default User
