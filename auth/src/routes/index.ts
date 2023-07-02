@@ -1,11 +1,13 @@
 import express, { Router, Request, Response } from 'express'
-import { body, validationResult } from 'express-validator'
+import { body } from 'express-validator'
 import jwt from 'jsonwebtoken'
 
 import User from '../models/user'
 import BadRequestError from '../errors/bad-request-error'
 import validateRequestError from '../middlewares/validate-request-error'
 import PasswordHashing from '../utils/password-hashing'
+import CurrentUser from '../middlewares/current-user'
+import RequireAuth from '../middlewares/require-auth'
 
 const router = express.Router()
 /**
@@ -76,36 +78,26 @@ router.route('/signin')
     })
 
 router.route('/current-user')
-    .get(async (req: Request, res: Response) => {
+    .get(CurrentUser, async (req: Request, res: Response) => {
         /**
          * @TODO
          * Get current logged in user
          */
-        if(!req.session?.jwt) {
-           return res.status(400).json({
-                status: 'failed',
-                currentUser: null
-            })
-        }
+        const currentUser = req.currentUser
+        res.status(200).json({
+            status: 'success',
+            currentUser
+        })
+    })
 
-        try {
-            const token = req.session?.jwt
-            const payload = jwt.verify(token, process.env.jwtsecret!) as jwt.JwtPayload
-            const user = await User.findById(payload.id)
+router.route('/signout')
+    .get((req: Request, res: Response) => {
+        req.session = null
 
-            res.status(200).json({
-                status: 'success',
-                data: {
-                    id: user?.id,
-                    email: user?.email
-                }
-            })
-        } catch (error) {
-            res.status(400).json({
-                status: 'failed',
-                currentUser: null
-            })
-        }
+        res.status(200).json({
+            status: 'success',
+            data: null
+        })
     })
 
 export default router
